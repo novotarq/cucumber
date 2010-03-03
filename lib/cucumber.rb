@@ -7,6 +7,7 @@ require 'cucumber/parser'
 require 'cucumber/step_mother'
 require 'cucumber/cli/main'
 require 'cucumber/broadcaster'
+require 'cucumber/page_elements'
 
 module Cucumber
   class << self
