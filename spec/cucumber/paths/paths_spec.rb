@@ -49,6 +49,12 @@ module Cucumber
         end
       end
 
+      it "is able to fetch a value from regexp" do
+        paths = PathResolver.new
+        paths.Path /try to fetch "(.*)"/ do |regex, value| value[0] end
+        paths.path_to("try to fetch \"/this value\"").should == "/this value"
+      end
+
     end
 
   end

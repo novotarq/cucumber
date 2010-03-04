@@ -43,14 +43,20 @@ module Cucumber
         @blocks[regexp] = proc
       end
 
-      def path_to(input)
-        result = nil
-        @blocks.each do |regex, block|
-        if regex.match input
-          result = block.call(input)
+      def path_to(step_name)
+        matched_step = match_step(step_name)
+        matched_step[2].call(matched_step[0], matched_step[1])
+      end
+      
+      def match_step(step_name)
+        matched_step = nil
+        @blocks.map do |regexp, proc|
+          if step_name =~ regexp
+            matched_step = [regexp, $~.captures, proc]
+            break
+          end
         end
-       end
-       result
+        matched_step
       end
       
     end
