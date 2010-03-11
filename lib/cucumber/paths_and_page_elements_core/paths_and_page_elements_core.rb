@@ -2,11 +2,11 @@ module Cucumber
   module PathsAndPageElementsCore
     
     def self.exec_block(input, type)
-      exec_put.exec_block(input)
+      exec_put.exec_block(input, type)
     end
 
-    def self.Put(regexp, &proc, type)
-      exec_put.Put(regexp, &proc, type)
+    def self.Put(regexp, type, &proc)
+      exec_put.Put(regexp, type, &proc)
     end
 
     def self.exec_put
@@ -17,7 +17,7 @@ module Cucumber
       
       class MissingProc < StandardError
         def message
-          "Path definitions must always have a proc"
+          "Element definitions must always have a proc"
         end
       end
       
@@ -27,8 +27,9 @@ module Cucumber
         @blocks[:page_element] = Hash.new
       end
 
-      def Put(key, &proc, type)
+      def Put(key, type, &proc)
         raise MissingProc if proc.nil?
+        hash_to_put = @blocks[type]
         
         regexp = case(key)
         when String
@@ -36,13 +37,14 @@ module Cucumber
         when Regexp
           key
         else
-          raise "Path patterns have to be Regexp or String, but your input was: #{key.inspect}"
+          raise "Element patterns have to be Regexp or String, but your input was: #{key.inspect}"
         end
         
-        if @blocks.has_key?(regexp)
+        if hash_to_put.has_key?(regexp)
           raise "The key #{regexp} is already present!"
         end
-        @blocks[type] << [regexp,proc]
+        
+        hash_to_put[regexp] = proc
       end
 
       def exec_block(step_name, type)
@@ -55,7 +57,7 @@ module Cucumber
         
         @blocks.map do |elem_type, elem_value|
           if elem_type == type
-            @elem_value.map do |regexp, proc|
+            elem_value.map do |regexp, proc|
               if step_name =~ regexp
                 matched_step = [regexp, $~.captures, proc]
                 break

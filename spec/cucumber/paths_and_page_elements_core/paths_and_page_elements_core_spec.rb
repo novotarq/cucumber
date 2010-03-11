@@ -6,10 +6,9 @@ module Cucumber
 
     describe PathsAndPageElements do
 
-      it "does a block of code for Regexp" do
-        paths = PathsAndPageElements.new
-        #paths.Put /^I am simple step$/ ,:path,do "simple" end
-        #paths.exec_block("I am simple step", :path).should == "simple"
+      it "should allow to register the same step names for path and page element" do
+        Path "I am simple step for registration test" do "simple" end
+        PageElement "I am simple step for registration test" do "simple" end
       end
 
     end

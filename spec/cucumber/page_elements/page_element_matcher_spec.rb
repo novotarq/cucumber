@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 require 'cucumber/page_elements'
-#require 'cucumber/paths_and_page_elements_core/paths_and_page_elements_core'
 
 module Cucumber
   module PageElements

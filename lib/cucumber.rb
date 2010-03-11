@@ -9,6 +9,7 @@ require 'cucumber/cli/main'
 require 'cucumber/broadcaster'
 require 'cucumber/paths'
 require 'cucumber/page_elements'
+require 'cucumber/paths_and_page_elements_core'
 
 module Cucumber
   class << self
