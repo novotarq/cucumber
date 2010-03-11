@@ -8,6 +8,7 @@ require 'cucumber/step_mother'
 require 'cucumber/cli/main'
 require 'cucumber/broadcaster'
 require 'cucumber/paths'
+require 'cucumber/page_elements'
 
 module Cucumber
   class << self
