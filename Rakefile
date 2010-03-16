@@ -25,8 +25,11 @@ begin
     gem.add_dependency 'json_pure', '>= 1.2.0'
 
     gem.add_development_dependency 'nokogiri', '>= 1.4.1'
-    gem.add_development_dependency 'prawn', '>= 0.6.3'
-    gem.add_development_dependency 'rspec', '>= 1.2.9'
+    gem.add_development_dependency 'prawn', '= 0.6.3'
+    gem.add_development_dependency 'prawn-format', '= 0.2.3'
+    gem.add_development_dependency 'htmlentities', '>= 4.2.0'
+    gem.add_development_dependency 'rspec', '>= 1.3.0'
+    gem.add_development_dependency 'syntax', '>= 1.0.0'
     gem.add_development_dependency 'spork', '>= 0.7.5' unless Cucumber::JRUBY || Cucumber::WINDOWS
 
     extend Cucumber::Formatter::ANSIColor
@@ -52,11 +55,7 @@ end
 
 Dir['gem_tasks/**/*.rake'].each { |rake| load rake }
 
-if(Cucumber::RUBY_1_9)
-  task :default => [:check_dependencies, :cucumber] # RSpec doesn't run on 1.9 yet.
-else
-  task :default => [:check_dependencies, :spec, :cucumber]
-end
+task :default => [:check_dependencies, :spec, :cucumber]
 
 require 'rake/clean'
 CLEAN.include %w(**/*.{log,pyc})

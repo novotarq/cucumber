@@ -39,6 +39,13 @@ module Cucumber
         template = File.open(i18n_tt, Cucumber.file_mode('r')).read
         erb = ERB.new(template)
         grammar = erb.result(binding)
+
+        # The Rails 2-3-stable branch has decided to monkey-patch ERB so that ERB#result
+        # returns a subclass of String (SafeBuffer). This class will escape '&',  '>',  '<' and '"',
+        # effectively breaking any other library that relies on ERB behavig the way it _should_.
+        # This is a workaround hack until this has been fixed in Rails.
+        grammar = "" + grammar # Make SafeBuffer a String again.
+
         Treetop.load_from_string(grammar)
         @parser = Parser::I18n.const_get("#{@keywords['grammar_name']}Parser").new
         def @parser.inspect
@@ -85,13 +92,17 @@ module Cucumber
         keywords('and', space)
       end
 
+      def given_keyword
+        keywords('given', false)[1] # The 0th one is a '*', which we don't want
+      end
+
       def step_keywords
         %w{given when then and but}.map{|key| keywords(key, true)}.flatten.uniq
       end
 
       def keywords(key, space=false)
         raise "No #{key} in #{@keywords.inspect}" if @keywords[key].nil?
-        @keywords[key].split('|').map{|kw| space ? keyword_space(kw) : kw}
+        @keywords[key].split('|').map{|kw| space ? keyword_space(kw) : kw}.uniq
       end
 
       private
