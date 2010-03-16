@@ -35,6 +35,13 @@ module Cucumber
         match_element("test 0-foobar-1").should == ["0","foobar","1"]
       end
       
+      it "should return nil where there is no matching regexp" do
+        PageElement /foobar/ do
+          "test OK"
+        end
+        match_element("test").should == nil
+      end
+      
     end
   end
 end

@@ -49,22 +49,19 @@ module Cucumber
 
       def exec_block(step_name, type)
         matched_step = match_step(step_name, type)
-        matched_step[2].call(matched_step[0], matched_step[1])
+        matched_step[2].call(matched_step[0], matched_step[1]) unless matched_step.nil?
       end
       
       def match_step(step_name, type)
         matched_step = nil
         
-        @blocks.map do |elem_type, elem_value|
-          if elem_type == type
-            elem_value.map do |regexp, proc|
-              if step_name =~ regexp
-                matched_step = [regexp, $~.captures, proc]
-                break
-              end
-            end  
+        @blocks[type].each do |regexp, proc|
+          if step_name =~ regexp
+              matched_step = [regexp, $~.captures, proc]
+            break
           end
         end
+        
         matched_step
       end
       
