@@ -49,6 +49,14 @@ module Cucumber
         path_to("try to fetch \"/this value\"").should == "/this value"
       end
 
+      it "should return nil where there is no matching regexp" do
+        Path /foobar/ do
+          "test OK"
+        end
+        path_to("test").should == nil
+      end
+
+
     end
 
   end
